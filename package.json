@@ -1,0 +1,19 @@
+{
+  "name": "babel-plugin-brackets-module-formatter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaggino/babel-plugin-brackets-module-formatter.git"
+  },
+  "author": "Martin Zagora <zaggino@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zaggino/babel-plugin-brackets-module-formatter/issues"
+  },
+  "homepage": "https://github.com/zaggino/babel-plugin-brackets-module-formatter#readme"
+}

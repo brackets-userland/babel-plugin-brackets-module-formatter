@@ -1,3 +1,6 @@
+// babel plugin to transform es6 modules into brackets compatible modules
+// based on https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-es2015-modules-amd/src/index.js
+
 var template = require("babel-template");
 
 // wrap everything in iife to avoid leaking globals
@@ -28,25 +31,13 @@ module.exports = function (babel) {
   }
 
   var amdVisitor = {
-    ReferencedIdentifier: function ReferencedIdentifier(options) {
-	  var node = options.node;
-	  var scope = options.scope;
-	  
-      if (node.name === "exports" && !scope.getBinding("exports")) {
-        this.hasExports = true;
-      }
-
-      if (node.name === "module" && !scope.getBinding("module")) {
-        this.hasModule = true;
-      }
-    },
-
-    CallExpression: function CallExpression(path) {
+    
+	CallExpression: function CallExpression(path) {
       if (!isValidRequireCall(path)) return;
       this.bareSources.push(path.node.arguments[0]);
       path.remove();
     },
-
+	
     VariableDeclarator: function VariableDeclarator(path) {
       var id = path.get("id");
       if (!id.isIdentifier()) return;
@@ -60,6 +51,7 @@ module.exports = function (babel) {
 
       path.remove();
     }
+	
   };
 
   return {
@@ -72,9 +64,6 @@ module.exports = function (babel) {
 
       // bare sources
       this.bareSources = [];
-
-      this.hasExports = false;
-      this.hasModule = false;
     },
 
     visitor: {

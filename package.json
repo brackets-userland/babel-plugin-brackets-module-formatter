@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint *.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/zaggino/babel-plugin-brackets-module-formatter/issues"
   },
-  "homepage": "https://github.com/zaggino/babel-plugin-brackets-module-formatter#readme"
+  "homepage": "https://github.com/zaggino/babel-plugin-brackets-module-formatter#readme",
+  "devDependencies": {
+    "eslint": "^2.8.0",
+    "eslint-config-eslint": "^3.0.0"
+  }
 }

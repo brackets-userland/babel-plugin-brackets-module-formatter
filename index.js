@@ -99,7 +99,7 @@ module.exports = function (babel) {
 			if (param) {
 				return t.variableDeclaration("var", [t.variableDeclarator(param, req)]);
 			}
-			return req;
+			return t.expressionStatement(req);
 		  });
 		  
 		  var node = path.node;	

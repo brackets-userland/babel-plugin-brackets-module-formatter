@@ -1,12 +1,10 @@
 var template = require("babel-template");
 
-var iifeDeclaration = template('(function () { BODY; }())');
-
-var exportDeclaration = template('var __export__ = {};');
+var iifeDeclaration = template('(function () { \'use strict\'; BODY; }())');
 
 var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
 
-var buildDefine = template('define(function (require, exports, module) { BODY; });');
+var buildDefine = template('define(function (require, exports, module) { IMPORTS; BODY; });');
 
 module.exports = function (babel) {
   var t = babel.types
@@ -95,25 +93,23 @@ module.exports = function (babel) {
           var moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          if (this.hasExports) {
-            sources.unshift(t.stringLiteral("exports"));
-            params.unshift(t.identifier("exports"));
-          }
-
-          if (this.hasModule) {
-            sources.unshift(t.stringLiteral("module"));
-            params.unshift(t.identifier("module"));
-          }
-
-          var node = path.node;	
-		  // factory.expression.body.directives = node.directives;
+          var imports = sources.map(function (source, index) {
+			var req = t.callExpression(t.identifier("require"), [source]);
+			var param = params[index];
+			if (param) {
+				return t.variableDeclaration("var", [t.variableDeclarator(param, req)]);
+			}
+			return req;
+		  });
+		  
+		  var node = path.node;	
 		  node.directives = [];
 		  node.body = [
 		    iifeDeclaration({
 				BODY: [
-					exportDeclaration(),
 					ensureDefine(),			
 					buildDefine({
+					  IMPORTS: imports,
 					  BODY: node.body
 					})
 				]			

@@ -6,6 +6,7 @@ module.exports = {
     node: true
   },
   rules: {
+    'brace-style': [1, '1tbs', { allowSingleLine: true }],
     'indent': [1, 2],
     'quotes': [1, 'single'],
     'no-underscore-dangle': 0,
@@ -13,6 +14,6 @@ module.exports = {
     'one-var': [2, 'never'],
     'require-jsdoc': 0,
     'space-before-function-paren': [1, {anonymous: 'always', named: 'never'}],
-    'strict': [1, 'function']
+    'strict': 0
   }
 };

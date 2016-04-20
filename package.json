@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-brackets-module-formatter",
   "version": "1.0.0",
-  "description": "",
+  "description": "babel plugin to transform es6 modules into brackets compatible modules",
   "main": "index.js",
   "scripts": {
     "test": "eslint *.js"
@@ -16,6 +16,10 @@
     "url": "https://github.com/zaggino/babel-plugin-brackets-module-formatter/issues"
   },
   "homepage": "https://github.com/zaggino/babel-plugin-brackets-module-formatter#readme",
+  "dependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.4",
+    "babel-template": "^6.7.0"
+  },
   "devDependencies": {
     "eslint": "^2.8.0",
     "eslint-config-eslint": "^3.0.0"

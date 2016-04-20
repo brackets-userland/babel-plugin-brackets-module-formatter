@@ -1,10 +1,14 @@
 var template = require("babel-template");
 
+// wrap everything in iife to avoid leaking globals
 var iifeDeclaration = template('(function () { \'use strict\'; BODY; }())');
 
-var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
+// if the file is loaded within brackets (define is present), use it to declare module
+// otherwise (define is not present in brackets node domains) execute immediately
+var ensureDefine = template('if (typeof define !== \'undefined\') { define(bracketsModule); } else { bracketsModule(require, exports, module); }');
 
-var buildDefine = template('define(function (require, exports, module) { IMPORTS; BODY; });');
+// this is the template for module declaration
+var buildDefine = template('function bracketsModule(require, exports, module) { IMPORTS; BODY; }');
 
 module.exports = function (babel) {
   var t = babel.types

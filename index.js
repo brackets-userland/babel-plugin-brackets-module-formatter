@@ -1,5 +1,7 @@
 var template = require("babel-template");
 
+var iifeDeclaration = template('(function () { BODY; }())');
+
 var exportDeclaration = template('var __export__ = {};');
 
 var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
@@ -107,11 +109,15 @@ module.exports = function (babel) {
 		  // factory.expression.body.directives = node.directives;
 		  node.directives = [];
 		  node.body = [
-		    exportDeclaration(),
-			ensureDefine(),			
-		    buildDefine({
-              BODY: node.body
-            })
+		    iifeDeclaration({
+				BODY: [
+					exportDeclaration(),
+					ensureDefine(),			
+					buildDefine({
+					  BODY: node.body
+					})
+				]			
+			})		    
 		  ];
         }
       }

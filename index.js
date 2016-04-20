@@ -1,8 +1,8 @@
 var template = require("babel-template");
 
-var buildDefine = template(`
-  define(MODULE_NAME, [SOURCES], FACTORY);
-`);
+var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
+
+var buildDefine = template('define(MODULE_NAME, [SOURCES], FACTORY);');
 
 var buildFactory = template(`
   (function (PARAMS) {
@@ -115,11 +115,14 @@ module.exports = function (babel) {
           factory.expression.body.directives = node.directives;
           node.directives = [];
 
-          node.body = [buildDefine({
-            MODULE_NAME: moduleName,
-            SOURCES: sources,
-            FACTORY: factory
-          })];
+          node.body = [
+		    ensureDefine(),
+		    buildDefine({
+              MODULE_NAME: moduleName,
+              SOURCES: sources,
+              FACTORY: factory
+            })
+		  ];
         }
       }
     }

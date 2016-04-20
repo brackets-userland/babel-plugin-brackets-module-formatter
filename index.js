@@ -1,12 +1,10 @@
 var template = require("babel-template");
 
-var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
-
 var exportDeclaration = template('var __export__ = {};');
 
-var buildDefine = template('define(MODULE_NAME, [SOURCES], FACTORY);');
+var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
 
-var buildFactory = template('(function (PARAMS) { BODY; }) ');
+var buildDefine = template('define(function (require, exports, module) { BODY; });');
 
 module.exports = function (babel) {
   var t = babel.types
@@ -78,10 +76,10 @@ module.exports = function (babel) {
     visitor: {
       Program: {
         exit: function exit(path) {
-          if (this.ran) {
+          if (path.bracketsModuleFormatterRan) {			  
 			  return;
 		  }
-          this.ran = true;
+		  path.bracketsModuleFormatterRan = true;
 
           path.traverse(amdVisitor, this);
 		  
@@ -105,21 +103,14 @@ module.exports = function (babel) {
             params.unshift(t.identifier("module"));
           }
 
-          var node = path.node;
-          var factory = buildFactory({
-            PARAMS: params,
-            BODY: node.body
-          });
-          factory.expression.body.directives = node.directives;
-          node.directives = [];
-
-          node.body = [
-		    ensureDefine(),
-			exportDeclaration(),
+          var node = path.node;	
+		  // factory.expression.body.directives = node.directives;
+		  node.directives = [];
+		  node.body = [
+		    exportDeclaration(),
+			ensureDefine(),			
 		    buildDefine({
-              MODULE_NAME: moduleName,
-              SOURCES: sources,
-              FACTORY: factory
+              BODY: node.body
             })
 		  ];
         }

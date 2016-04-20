@@ -4,11 +4,7 @@ var ensureDefine = template('if (typeof define === \'undefined\') { var define =
 
 var buildDefine = template('define(MODULE_NAME, [SOURCES], FACTORY);');
 
-var buildFactory = template(`
-  (function (PARAMS) {
-    BODY;
-  })
-`);
+var buildFactory = template('(function (PARAMS) { BODY; }) ');
 
 module.exports = function (babel) {
   var t = babel.types

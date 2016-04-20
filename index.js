@@ -92,7 +92,7 @@ module.exports = function (babel) {
 
           sources = sources.concat(this.bareSources.filter(function (str) {
             return !this.sourceNames[str.value];
-          }));
+          }.bind(this)));
 
           var moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);

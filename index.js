@@ -2,6 +2,8 @@ var template = require("babel-template");
 
 var ensureDefine = template('if (typeof define === \'undefined\') { var define = function (cb) { cb(require, exports, module); } }');
 
+var exportDeclaration = template('var __export__ = {};');
+
 var buildDefine = template('define(MODULE_NAME, [SOURCES], FACTORY);');
 
 var buildFactory = template('(function (PARAMS) { BODY; }) ');
@@ -82,9 +84,9 @@ module.exports = function (babel) {
           this.ran = true;
 
           path.traverse(amdVisitor, this);
-
-          var params = this.sources.map((source) => source[0]);
-          var sources = this.sources.map((source) => source[1]);
+		  
+		  var params = this.sources.map(function (source) { return source[0]; });
+          var sources = this.sources.map(function (source) { return source[1]; });
 
           sources = sources.concat(this.bareSources.filter(function (str) {
             return !this.sourceNames[str.value];
@@ -113,6 +115,7 @@ module.exports = function (babel) {
 
           node.body = [
 		    ensureDefine(),
+			exportDeclaration(),
 		    buildDefine({
               MODULE_NAME: moduleName,
               SOURCES: sources,

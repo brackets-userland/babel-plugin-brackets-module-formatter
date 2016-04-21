@@ -10,7 +10,7 @@ module.exports = {
     'indent': [1, 2],
     'quotes': [1, 'single'],
     'no-underscore-dangle': 0,
-    'no-unused-vars': [2, { vars: 'all', args: 'after-used', caughtErrors: 'all', caughtErrorsIgnorePattern: '^ignore' }],
+    'no-unused-vars': [2, { vars: 'all', args: 'all', argsIgnorePattern: '^_', caughtErrors: 'all', caughtErrorsIgnorePattern: '^ignore' }],
     'one-var': [2, 'never'],
     'require-jsdoc': 0,
     'space-before-function-paren': [1, {anonymous: 'always', named: 'never'}],
